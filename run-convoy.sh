@@ -15,7 +15,8 @@ if [ -z "$CONVOY_DRIVER_NAME" ]; then
     exit 1
 fi
 
-nohup convoy --socket $CONVOY_SOCKET daemon --drivers vfs --driver-opts vfs.path=$CONVOY_DATA_DIR &
+touch /root/convoy.logs
+convoy --socket $CONVOY_SOCKET daemon --drivers vfs --driver-opts vfs.path=$CONVOY_DATA_DIR > /root/convoy.logs 2>&1 &
 sleep 1
 echo "unix://$CONVOY_SOCKET" > /etc/docker/plugins/$CONVOY_DRIVER_NAME.spec
-tail -f nohup.out
+tail -f /root/convoy.logs
